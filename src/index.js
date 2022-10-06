@@ -1,5 +1,3 @@
-// import './css/styles.css';
-
 import Notiflix from 'notiflix';
 import galleryCard from './templates/gallery-card.hbs';
 import GalleryApiService from './api-service';
@@ -28,6 +26,7 @@ function onSearch(event) {
       `Sorry, there are no images matching your search query. Please try again.`
     );
   }
+
   galleryApiService.resetPage();
 
   galleryApiService
@@ -41,11 +40,22 @@ function onSearch(event) {
         `Sorry, there are no images matching your search query. Please try again.`
       )
     );
-  refs.loadMoreBtn.classList.remove('is-hidden');
+
+  console.log(
+    'galleryApiService.getTotalHits()',
+    galleryApiService.getTotalHits()
+  );
+  if (galleryApiService.getTotalHits() !== 0) {
+    refs.loadMoreBtn.classList.remove('is-hidden');
+  }
 }
 
 function onloadMore() {
   galleryApiService.fetchArticles().then(appendArticlesMarkup);
+
+  if (galleryApiService.getTotalPage() === galleryApiService.getCurentPage()) {
+    refs.loadMoreBtn.classList.add('is-hidden');
+  }
 }
 
 function appendArticlesMarkup(hits) {

@@ -19,14 +19,12 @@ body {
   margin-bottom: 16px;
 }
 
-/* Класс для обнуления базовых свойств у списков (ul) */
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Свойства для корректного отображения картинок */
 img {
   display: block;
   max-width: 100%;
@@ -43,7 +41,7 @@ img {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  /* padding: 20px; */
+  padding: 20px;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 30px;
@@ -88,36 +86,3 @@ img {
   pointer-events: none;
   visibility: hidden;
 }
-/* .country_list {
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.88;
-
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.country__blok {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.country__title {
-  font-family: inherit;
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 1.88;
-}
-
-.country__name {
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.88;
-}
-
-.country__property {
-  font-weight: 400;
-} */
