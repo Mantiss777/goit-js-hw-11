@@ -1,54 +1,57 @@
 // import './css/styles.css';
-import debounce from 'lodash.debounce';
+
 import Notiflix from 'notiflix';
-import countryList from './templates/country-list.hbs';
-import countryInfo from './templates/country-info.hbs';
-import fetchCountries from './fetchCountries';
+import galleryCard from './templates/gallery-card.hbs';
+import GalleryApiService from './api-service';
 
 const DEBOUNCE_DELAY = 500;
 
 const refs = {
-  inputRequest: document.querySelector('#search-box'),
-  addCountryList: document.querySelector('.country-list'),
-  addCountryInfo: document.querySelector('.country-info'),
+  searchForm: document.querySelector('#search-form'),
+  addGallery: document.querySelector('.gallery'),
+  loadMoreBtn: document.querySelector('[data-action="load-more"]'),
 };
 
-refs.inputRequest.addEventListener(
-  'input',
-  debounce(onInputCountry, DEBOUNCE_DELAY)
-);
+const galleryApiService = new GalleryApiService();
 
-function onInputCountry(event) {
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onloadMore);
+
+function onSearch(event) {
   event.preventDefault();
-  const name = event.target.value.trim();
 
-  if (name === '') {
-    refs.addCountryList.innerHTML = '';
-    refs.addCountryInfo.innerHTML = '';
-    return;
+  galleryApiService.query = event.currentTarget.elements.searchQuery.value;
+
+  if (galleryApiService.query === '') {
+    clearArticlesContainer();
+    return Notiflix.Notify.info(
+      `Sorry, there are no images matching your search query. Please try again.`
+    );
   }
+  galleryApiService.resetPage();
 
-  fetchCountries(name.trim()).then(country => {
-    if (country.length > 10) {
-      Notiflix.Notify.info(
-        `Too many matches found. Please enter a more specific name.`
-      );
-    } else if (country.length >= 2) {
-      refs.addCountryInfo.innerHTML = '';
-      refs.addCountryList.innerHTML = country.map(countryList).join('');
-    } else if (country.length === 1) {
-      refs.addCountryList.innerHTML = '';
-      const languages = Object.values(country[0].languages).join(', ');
+  galleryApiService
+    .fetchArticles()
+    .then(hits => {
+      clearArticlesContainer();
+      appendArticlesMarkup(hits);
+    })
+    .catch(error =>
+      Notiflix.Notify.failure(
+        `Sorry, there are no images matching your search query. Please try again.`
+      )
+    );
+  refs.loadMoreBtn.classList.remove('is-hidden');
+}
 
-      country[0].languages = languages;
+function onloadMore() {
+  galleryApiService.fetchArticles().then(appendArticlesMarkup);
+}
 
-      const markupCountryInfo = country.map(countryInfo).join('');
+function appendArticlesMarkup(hits) {
+  refs.addGallery.insertAdjacentHTML('beforeend', galleryCard(hits));
+}
 
-      refs.addCountryInfo.innerHTML = markupCountryInfo;
-    } else {
-      refs.addCountryList.innerHTML = '';
-      refs.addCountryInfo.innerHTML = '';
-      Notiflix.Notify.failure(`Oops, there is no country with that name`);
-    }
-  });
+function clearArticlesContainer() {
+  refs.addGallery.innerHTML = '';
 }

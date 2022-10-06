@@ -5,12 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 10</title>
+    <!--modern-normalize-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+    />
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <input type="text" id="search-box" />
+    <form class="search-form" id="search-form">
+      <input
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button type="submit">Search</button>
+    </form>
+    <div class="gallery">
+      <!-- Картки зображень -->
+    </div>
+    <div class="button__comtainer">
+      <button
+        class="button  is-hidden"
+        type="submit"
+        data-action="load-more"
+      >
+        </span>
+        <span class="label">Load more </span>
+      </button>
+    </div>
+
+    <!-- <input type="text" id="search-box" />
     <ul class="country-list"></ul>
-    <div class="country-info"></div>
+    <div class="country-info"></div> -->
 
     <script src="index.js" type="module"></script>
   </body>
